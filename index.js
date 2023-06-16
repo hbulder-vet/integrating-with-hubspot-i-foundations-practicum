@@ -23,7 +23,7 @@ app.get('/albums', async (req, res) => {
     try {
         const resp = await axios.get(albums, { headers });
         const data = resp.data.results;
-        //res.json(data);
+        res.json(data);
         res.render('albums', { title: 'Albums | HubSpot APIs', data });      
     } catch (error) {
         console.error(error);
