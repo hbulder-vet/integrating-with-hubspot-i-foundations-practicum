@@ -1,0 +1,13 @@
+doctype html
+html 
+    head 
+        title= `${title}`
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        link(rel="stylesheet", href="/css/style.css")
+    body    
+        h1 Albums
+        .cards 
+            each album in data
+                .card 
+                    h2.card__name #{album.properties.name}
+                    p.card__year #{album.properties.year}
