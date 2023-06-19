@@ -24,7 +24,7 @@ app.get('/albums', async (req, res) => {
         const resp = await axios.get(albums, { headers });
         const data = resp.data.results;
         //res.json(data);
-        res.render('albums', { title: 'Albums | HubSpot APIs', data });      
+        res.render('albums', { title: 'Albums', data });      
     } catch (error) {
         console.error(error);
     }
@@ -34,10 +34,13 @@ app.get('/albums', async (req, res) => {
 // TODO: ROUTE 2 - Create a new app.get route for the form to create or update new custom object data. Send this data along in the next route.
 
 app.get('/update', async (req, res) => {
+
     // http://localhost:3000/update?email=rick@crowbars.net
     const hs_object_id = req.query.hs_object_id;
+    if (hs_object_id){
 
-    const getAlbum = `https://api.hubapi.com/crm/v3/objects/2-115195106/${hs_object_id}?properties=name,style,artist`;
+
+    const getAlbum = `https://api.hubapi.com/crm/v3/objects/2-115195106/${hs_object_id}?properties=name,style,artist,year`;
     const headers = {
         Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
         'Content-Type': 'application/json'
@@ -48,11 +51,23 @@ app.get('/update', async (req, res) => {
         const data = response.data;
 
         // res.json(data);
-        res.render('update', {style: data.properties.style});
+        res.render('update', {name: data.properties.name, artist: data.properties.artist, style: data.properties.style, year: data.properties.year});
         
     } catch(err) {
         console.error(err);
     }
+}else{
+
+    try {
+
+
+        // res.json(data);
+        res.redirect('add');
+        
+    } catch(err) {
+        console.error(err);
+    }
+}
 });
 
 // TODO: ROUTE 3 - Create a new app.post route for the custom objects form to create or update your custom object data. Once executed, redirect the user to the homepage.
@@ -60,7 +75,9 @@ app.get('/update', async (req, res) => {
 app.post('/update', async (req, res) => {
     const update = {
         properties: {
-            "style": req.body.newVal
+            "name": req.body.name,
+            "artist": req.body.artist,
+            "year": req.body.year,
         }
     }
 
@@ -80,36 +97,44 @@ app.post('/update', async (req, res) => {
 
 });
 
+app.get('/add', async (req, res) => {
 
-/** 
-* * This is sample code to give you a reference for how you should structure your calls. 
+    try {
 
 
-* * App.post sample
-app.post('/update', async (req, res) => {
-    const update = {
+        // res.json(data);
+        res.render('add');
+        
+    } catch(err) {
+        console.error(err);
+    }
+});
+
+app.post('/add', async (req, res) => {
+    const create = {
         properties: {
-            "favorite_book": req.body.newVal
+            "name": req.body.name,
+            "artist": req.body.artist,
+            "year": req.body.year,
+            "style": req.body.style
         }
     }
-
-    const email = req.query.email;
-    const updateContact = `https://api.hubapi.com/crm/v3/objects/contacts/${email}?idProperty=email`;
+    const createAlbum = `https://api.hubapi.com/crm/v3/objects/2-115195106/`;
     const headers = {
         Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
         'Content-Type': 'application/json'
     };
 
     try { 
-        await axios.patch(updateContact, update, { headers } );
-        res.redirect('back');
+        await axios.post(createAlbum, create, { headers } );
+        res.redirect('albums');
     } catch(err) {
         console.error(err);
     }
 
 });
-*/
 
 
-// * Localhost
+
+
 app.listen(3000, () => console.log('Listening on http://localhost:3000'));

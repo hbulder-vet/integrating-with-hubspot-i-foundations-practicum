@@ -5,9 +5,14 @@ html(lang="en")
         link(rel="stylesheet", href="/css/style.css")
     body
         .form-wrapper
-            p Name: #{name}
-            p style: #{style}
+            p Album Name: #{name}
+            p Style: #{style}
             form(method="POST")
-                label(for="newVal") Update Style
-                input(type="text" name="newVal" required)
+                label(for="artist") Artist:
+                input(type="text" name="artist" value=artist required)
+                label(for="year") Year:
+                input(type="text" name="year" value=year)
                 input(type="submit" value="Submit")
+        
+            a(href='/albums')
+                input(type='button' value='Back') 

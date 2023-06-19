@@ -12,3 +12,10 @@ html
                     h2.card__name #{album.properties.name} By #{album.properties.artist}
                     p.card__year Year: #{album.properties.year}
                     p.card__year Style: #{album.properties.style}
+                    a(href=`update?hs_object_id=${album.properties.hs_object_id}`) edit
+            .card
+                a(href='/add')
+                    input(type='button' value='Add Album') 
+                
+
+                                

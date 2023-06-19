@@ -1,0 +1,23 @@
+doctype html
+html(lang="en")
+    head
+        title Update contact info
+        link(rel="stylesheet", href="/css/style.css")
+    body
+        .form-wrapper
+        
+            form(method="POST")
+                label(for="name") Album Name
+                input(type="text" name="name" required)
+                label(for="artist") Artist
+                input(type="text" name="artist" required)
+                label(for="year") Year
+                input(type="text" name="Year" required)
+                label(for="style") Style
+                select(name="style")
+                        option(value=Disco) Disco
+                        option(value=Soul) Soul
+                        option(value=Pop) Pop
+                        option(value=Rock) Rock
+                        option(value=Classic) Classic
+                input(type="submit" value="Submit")
