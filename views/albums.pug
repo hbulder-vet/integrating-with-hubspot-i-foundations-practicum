@@ -9,5 +9,6 @@ html
         .cards 
             each album in data
                 .card 
-                    h2.card__name #{album.properties.name}
-                    p.card__year #{album.properties.year}
+                    h2.card__name #{album.properties.name} By #{album.properties.artist}
+                    p.card__year Year: #{album.properties.year}
+                    p.card__year Style: #{album.properties.style}

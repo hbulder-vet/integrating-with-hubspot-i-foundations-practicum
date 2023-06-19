@@ -14,7 +14,7 @@ const PRIVATE_APP_ACCESS = 'pat-eu1-7d455934-e0dc-4a08-8892-df1eb549c20d';
 
 app.get('/albums', async (req, res) => {
 
-    const albums = 'https://api.hubspot.com/crm/v3/objects/2-115195106?properties=name,year';
+    const albums = 'https://api.hubspot.com/crm/v3/objects/2-115195106?properties=name,year,style,artist';
     const headers = {
         Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
         'Content-Type': 'application/json'
@@ -23,7 +23,7 @@ app.get('/albums', async (req, res) => {
     try {
         const resp = await axios.get(albums, { headers });
         const data = resp.data.results;
-        res.json(data);
+        //res.json(data);
         res.render('albums', { title: 'Albums | HubSpot APIs', data });      
     } catch (error) {
         console.error(error);
@@ -33,31 +33,57 @@ app.get('/albums', async (req, res) => {
 
 // TODO: ROUTE 2 - Create a new app.get route for the form to create or update new custom object data. Send this data along in the next route.
 
-// * Code for Route 2 goes here
+app.get('/update', async (req, res) => {
+    // http://localhost:3000/update?email=rick@crowbars.net
+    const hs_object_id = req.query.hs_object_id;
+
+    const getAlbum = `https://api.hubapi.com/crm/v3/objects/2-115195106/${hs_object_id}?properties=name,style,artist`;
+    const headers = {
+        Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
+        'Content-Type': 'application/json'
+    };
+
+    try {
+        const response = await axios.get(getAlbum, { headers });
+        const data = response.data;
+
+        // res.json(data);
+        res.render('update', {style: data.properties.style});
+        
+    } catch(err) {
+        console.error(err);
+    }
+});
 
 // TODO: ROUTE 3 - Create a new app.post route for the custom objects form to create or update your custom object data. Once executed, redirect the user to the homepage.
 
-//App.post sample
+app.post('/update', async (req, res) => {
+    const update = {
+        properties: {
+            "style": req.body.newVal
+        }
+    }
+
+    const hs_object_id = req.query.hs_object_id;
+    const updateAlbum = `https://api.hubapi.com/crm/v3/objects/2-115195106/${hs_object_id}`;
+    const headers = {
+        Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
+        'Content-Type': 'application/json'
+    };
+
+    try { 
+        await axios.patch(updateAlbum, update, { headers } );
+        res.redirect('back');
+    } catch(err) {
+        console.error(err);
+    }
+
+});
 
 
 /** 
 * * This is sample code to give you a reference for how you should structure your calls. 
 
-* * App.get sample
-app.get('/contacts', async (req, res) => {
-    const contacts = 'https://api.hubspot.com/crm/v3/objects/contacts';
-    const headers = {
-        Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
-        'Content-Type': 'application/json'
-    }
-    try {
-        const resp = await axios.get(contacts, { headers });
-        const data = resp.data.results;
-        res.render('contacts', { title: 'Contacts | HubSpot APIs', data });      
-    } catch (error) {
-        console.error(error);
-    }
-});
 
 * * App.post sample
 app.post('/update', async (req, res) => {

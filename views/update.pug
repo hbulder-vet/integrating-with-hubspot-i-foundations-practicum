@@ -1,0 +1,13 @@
+doctype html
+html(lang="en")
+    head
+        title Update contact info
+        link(rel="stylesheet", href="/css/style.css")
+    body
+        .form-wrapper
+            p Name: #{name}
+            p style: #{style}
+            form(method="POST")
+                label(for="newVal") Update Style
+                input(type="text" name="newVal" required)
+                input(type="submit" value="Submit")
